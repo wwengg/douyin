@@ -3,11 +3,13 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"douyin/config"
-	"github.com/elazarl/goproxy"
 	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/elazarl/goproxy"
+
+	"github.com/wwengg/douyin/config"
 )
 
 func initializeCA(certificateFile string, privateKeyFile string) (*tls.Certificate, error) {

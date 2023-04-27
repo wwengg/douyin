@@ -3,11 +3,13 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/elazarl/goproxy"
 	"io"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/elazarl/goproxy"
+
 )
 
 func main() {
@@ -24,8 +26,13 @@ func main() {
 	//	}
 	//	return req, nil
 	//})
+	proxy.AddWebsocketHandler(func(data []byte, direction goproxy.WebsocketDirection, ctx *goproxy.ProxyCtx) []byte {
+		log.Print(direction)
+		log.Print(string(data))
+		return nil
+	})
 
-	proxy.OnResponse(shouldInterceptResponse()).DoFunc(
+	proxy.OnResponse(goproxy.UrlHasPrefix("https://webcast.amemv.com/webcast/room/create/")).DoFunc(
 		func(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 			//httpResponse, _ := httputil.DumpResponse(resp, true)
 			//res := unmarshalHTTPResponse(httpResponse)
@@ -50,16 +57,3 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8001", proxy))
 }
 
-func shouldInterceptResponse() goproxy.RespConditionFunc {
-	return func(res *http.Response, ctx *goproxy.ProxyCtx) bool {
-		//log.Println(res.Request.Host)
-		if res.Request.Host == "webcast.amemv.com" && res.Request.URL.Path == "/webcast/room/create/" {
-			log.Println(res.Request.URL.Path)
-			return true
-		} else {
-			return false
-		}
-		// TODO: query config for whether or not request should be intercepted and logged
-		//return true
-	}
-}

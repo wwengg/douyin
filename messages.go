@@ -1,10 +1,11 @@
 package main
 
 import (
-	"douyin/regexputil"
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/wwengg/douyin/regexputil"
 )
 
 // HTTPHeader represents a http header
