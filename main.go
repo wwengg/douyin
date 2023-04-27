@@ -49,7 +49,6 @@ func main() {
 				return
 			}
 			for _, message := range res.Messages {
-				log.Println("DoMessage")
 				fayProxyServer.DoMessage(message)
 			}
 		}

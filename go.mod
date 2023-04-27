@@ -8,5 +8,6 @@ require (
 	github.com/gorilla/websocket v1.5.0
 )
 
-//replace github.com/elazarl/goproxy v0.0.0-20221015165544-a0805db90819 => github.com/wwengg/goproxy v0.0.1
-replace github.com/elazarl/goproxy v0.0.0-20221015165544-a0805db90819 => ../../../goproxy
+replace github.com/elazarl/goproxy v0.0.0-20221015165544-a0805db90819 => github.com/wwengg/goproxy v0.0.2
+
+//replace github.com/elazarl/goproxy v0.0.0-20221015165544-a0805db90819 => ../../../goproxy
