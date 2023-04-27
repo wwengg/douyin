@@ -138,8 +138,10 @@ func (s *FayProxyServer) send(pack *fay.MsgPack) {
 
 func (s *FayProxyServer) onMemberMessgae(message proto.MemberMessage) {
 	s.send(fay.CreateMsgPack(message, fay.MsgType_JoinRoom))
+	log.Printf("%s 来了", message.User.Nickname)
 }
 
 func (s *FayProxyServer) onChatMessage(message proto.ChatMessage) {
 	s.send(fay.CreateMsgPack(message, fay.MsgType_DanMu))
+	log.Printf("%s说: %s", message.User.Nickname, message.Content)
 }
