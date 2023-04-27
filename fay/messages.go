@@ -1,5 +1,7 @@
 package fay
 
+import "encoding/json"
+
 type MsgType uint32
 
 // 无 = 0,
@@ -61,9 +63,10 @@ type MsgPack struct {
 	Data    string  `json:"data"`
 }
 
-func CreateMsgPack(data string, msgType MsgType) *MsgPack {
+func CreateMsgPack(data interface{}, msgType MsgType) *MsgPack {
+	jsonData, _ := json.Marshal(data)
 	return &MsgPack{
 		MsgType: msgType,
-		Data:    data,
+		Data:    string(jsonData),
 	}
 }

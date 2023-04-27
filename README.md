@@ -15,8 +15,6 @@
 7. 关闭代理服务器
 8. 退出本进程
 
-## 注意事项
-要关直播请再次运行直播伴侣 点 继续直播 然后再关闭直播 否则就算不推流了也不会立刻下播（懒得写下播了）
 
 ### OpenSSL生成证书
 ```bash
@@ -42,6 +40,12 @@ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keyc
 ### Ios信任证书
 1. 将proxy-ca.crt发至手机
 2. 。。。。
+
+## 注意事项
+要关直播请再次运行直播伴侣 点 继续直播 然后再关闭直播 否则就算不推流了也不会立刻下播（懒得写下播了）
+
+### Fay中需将json的大写首字母改成小写
+![Fay中需修改的代码](fay/fay.pic.jpg)
 
 
 ### 感谢

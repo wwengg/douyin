@@ -113,11 +113,13 @@ func (s *FayProxyServer) DoMessage(message *proto.Message) {
 	list = append(list, message.MsgId)
 	s.Dictionary[message.Method] = list
 	switch message.Method {
+	// 用户进入
 	case "WebcastMemberMessage":
 		memberMessage := proto.MemberMessage{}
 		memberMessage.XXX_Unmarshal(message.Payload)
 		s.onMemberMessgae(memberMessage)
 		break
+	// 用户留言
 	case "WebcastChatMessage":
 		chatMessage := proto.ChatMessage{}
 		chatMessage.XXX_Unmarshal(message.Payload)
@@ -130,19 +132,14 @@ func (s *FayProxyServer) DoMessage(message *proto.Message) {
 }
 
 func (s *FayProxyServer) send(pack *fay.MsgPack) {
-
 	data, _ := json.Marshal(pack)
 	s.GetConnMgr().SendMsgToAllConn(data)
-
 }
 
 func (s *FayProxyServer) onMemberMessgae(message proto.MemberMessage) {
-	data, _ := json.Marshal(message)
-	s.send(fay.CreateMsgPack(string(data), fay.MsgType_JoinRoom))
-
+	s.send(fay.CreateMsgPack(message, fay.MsgType_JoinRoom))
 }
 
 func (s *FayProxyServer) onChatMessage(message proto.ChatMessage) {
-	data, _ := json.Marshal(message)
-	s.send(fay.CreateMsgPack(string(data), fay.MsgType_DanMu))
+	s.send(fay.CreateMsgPack(message, fay.MsgType_DanMu))
 }
