@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/wwengg/douyin/fay/impl"
+	"github.com/wwengg/douyin/model"
 	"github.com/wwengg/douyin/proto"
 	"github.com/wwengg/douyin/utils"
 	"io"
@@ -16,7 +17,7 @@ import (
 )
 
 func main() {
-	configureCA()
+	utils.ConfigureCA()
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.Verbose = false
 
@@ -71,16 +72,16 @@ func main() {
 
 			if nr > 0 {
 				fullPacket = append(fullPacket, buf[:nr]...)
-				websocketPacket := newWebsocketPacket(fullPacket)
+				websocketPacket := model.NewWebsocketPacket(fullPacket)
 
-				if !websocketPacket.valid {
+				if !websocketPacket.Valid {
 					continue
 				}
 
-				websocketPacket.payload = proxy.FilterWebsocketPacket(websocketPacket.payload, direction, ctx)
-				encodedPacket := websocketPacket.encode()
+				websocketPacket.Payload = proxy.FilterWebsocketPacket(websocketPacket.Payload, direction, ctx)
+				encodedPacket := websocketPacket.Encode()
 				nw, ew := dst.Write(encodedPacket)
-				fullPacket = fullPacket[websocketPacket.packetSize:]
+				fullPacket = fullPacket[websocketPacket.PacketSize:]
 
 				if nw < 0 || len(encodedPacket) < nw {
 					nw = 0
@@ -124,4 +125,12 @@ func main() {
 	)
 	log.Println("软件准备就绪，请启动【直播伴侣】并且点击【开始直播】")
 	log.Fatal(http.ListenAndServe(":8001", proxy))
+}
+
+type RtmpLive struct {
+	Data struct {
+		StreamUrl struct {
+			RtmpPushUrl string `json:"rtmp_push_url"`
+		} `json:"stream_url"`
+	} `json:"data"`
 }

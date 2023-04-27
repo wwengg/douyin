@@ -1,4 +1,4 @@
-package main
+package model
 
 type RtmpLive struct {
 	Data struct {

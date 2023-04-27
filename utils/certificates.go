@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"crypto/tls"
@@ -32,7 +32,7 @@ func initializeCA(certificateFile string, privateKeyFile string) (*tls.Certifica
 	return &ca, nil
 }
 
-func configureCA() {
+func ConfigureCA() {
 	var err error
 	certificateFile := config.Get("CERTIFICATE_FILE", "./certificates/proxy-ca.crt")
 	privateKeyFile := config.Get("PRIVATE_KEY_FILE", "./certificates/proxy-ca.key")

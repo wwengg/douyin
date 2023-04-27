@@ -1,26 +1,26 @@
-package main
+package model
 
 import "encoding/binary"
 
 type websocketPacket struct {
-	valid         bool
+	Valid         bool
 	flags         byte
 	opcode        int
 	opcode_str    string
 	mask          bool
 	payloadLength int
 	maskingKey    []byte
-	payload       []byte
-	packetSize    int
+	Payload       []byte
+	PacketSize    int
 }
 
-func newWebsocketPacket(packet []byte) *websocketPacket {
+func NewWebsocketPacket(packet []byte) *websocketPacket {
 	p := &websocketPacket{}
 	if len(packet) <= 6 {
-		p.valid = false
+		p.Valid = false
 		return p
 	}
-	p.valid = true
+	p.Valid = true
 	p.flags = packet[0] & 0xF0
 	p.opcode = int(packet[0] & 0x0F)
 	p.mask = (packet[1] & 0x80) == 0x80
@@ -28,7 +28,7 @@ func newWebsocketPacket(packet []byte) *websocketPacket {
 	packetStart := 2
 	if p.payloadLength == 126 {
 		if len(packet) <= 8 {
-			p.valid = false
+			p.Valid = false
 			return p
 		}
 
@@ -39,7 +39,7 @@ func newWebsocketPacket(packet []byte) *websocketPacket {
 		}
 	} else if p.payloadLength == 127 {
 		if len(packet) <= 14 {
-			p.valid = false
+			p.Valid = false
 			return p
 		}
 
@@ -58,13 +58,13 @@ func newWebsocketPacket(packet []byte) *websocketPacket {
 		packetStart += 4
 	}
 
-	p.packetSize = packetStart + p.payloadLength
-	if packetStart > len(packet) || p.packetSize > len(packet) {
-		p.payload = make([]byte, 0)
-		p.valid = false
+	p.PacketSize = packetStart + p.payloadLength
+	if packetStart > len(packet) || p.PacketSize > len(packet) {
+		p.Payload = make([]byte, 0)
+		p.Valid = false
 	} else {
-		p.payload = packet[packetStart:p.packetSize]
-		p.valid = (len(p.payload) == p.payloadLength)
+		p.Payload = packet[packetStart:p.PacketSize]
+		p.Valid = (len(p.Payload) == p.payloadLength)
 	}
 
 	if p.opcode == 0x00 {
@@ -83,21 +83,21 @@ func newWebsocketPacket(packet []byte) *websocketPacket {
 		p.opcode_str = "Unknown"
 	}
 
-	if p.valid && p.maskingKey != nil {
+	if p.Valid && p.maskingKey != nil {
 		for i := 0; i < p.payloadLength; i++ {
-			p.payload[i] ^= p.maskingKey[i%4]
+			p.Payload[i] ^= p.maskingKey[i%4]
 		}
 	}
 
 	return p
 }
 
-func (packet *websocketPacket) encode() []byte {
-	packetLength := 2 + len(packet.maskingKey) + len(packet.payload)
+func (packet *websocketPacket) Encode() []byte {
+	packetLength := 2 + len(packet.maskingKey) + len(packet.Payload)
 	packetStart := 2 + len(packet.maskingKey)
 	maskingKeyStart := 2
 
-	packet.payloadLength = len(packet.payload)
+	packet.payloadLength = len(packet.Payload)
 
 	if packet.payloadLength > 125 {
 		packetLength += 2
@@ -132,12 +132,12 @@ func (packet *websocketPacket) encode() []byte {
 	// reencode using the masking key
 	if packet.maskingKey != nil {
 		copy(buf[maskingKeyStart:], packet.maskingKey)
-		copy(buf[packetStart:], packet.payload)
-		for i := 0; i < len(packet.payload); i++ {
+		copy(buf[packetStart:], packet.Payload)
+		for i := 0; i < len(packet.Payload); i++ {
 			buf[i+packetStart] ^= packet.maskingKey[i%4]
 		}
 	} else {
-		copy(buf[packetStart:], packet.payload)
+		copy(buf[packetStart:], packet.Payload)
 	}
 
 	return buf
