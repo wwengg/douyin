@@ -47,6 +47,23 @@ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keyc
 ### Fay中需将json的大写首字母改成小写
 ![Fay中需修改的代码](fay/fay.pic.jpg)
 
+## 运行说明
+
+### Docker运行
+> 需要先生成证书
+```bash
+./certificates/generate-certificates.sh
+cd ./docker
+docker-compose up -d
+```
+
+### release下载可执行文件运行
+
+> 1. [下载](https://github.com/wwengg/douyin/releases)
+> 2. 生成证书
+> 3. 信任证书
+> 4. 打开可执行文件
+> 5. 将证书发给需要代理的设备
 
 ### 感谢
 - [goproxy](https://github.com/elazarl/goproxy)

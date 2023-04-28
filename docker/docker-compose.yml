@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  proxy:
+    build:
+      context: ../../douyin
+      dockerfile: ./Dockerfile
+    container_name: douyin-proxy
+    restart: always
+    ports:
+      - '8001:8001'
+      - '8888:8888'
