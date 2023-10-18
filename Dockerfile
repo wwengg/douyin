@@ -29,5 +29,5 @@ COPY --from=0 /go/src/douyin/certificates ./certificates
 RUN cp ./certificates/proxy-ca.crt /usr/local/share/ca-certificates/proxy-ca.crt
 RUN update-ca-certificates
 
-EXPOSE 8001
+EXPOSE 8001,8888
 ENTRYPOINT ./server

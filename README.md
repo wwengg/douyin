@@ -64,6 +64,7 @@ docker-compose up -d
 > 3. 信任证书
 > 4. 打开可执行文件
 > 5. 将证书发给需要代理的设备
+> 6. 电脑/手机设置代理地址 ip:8001
 
 ### 感谢
 - [goproxy](https://github.com/elazarl/goproxy)

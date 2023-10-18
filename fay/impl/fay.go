@@ -37,7 +37,7 @@ func (s *FayProxyServer) GetConnMgr() fay.ConnManager {
 // Start Websocket网络服务
 func (s *FayProxyServer) StartWebsocket() {
 	//logger.ZapLog.Info("Start Websocket server", zap.String("addr", s.WsAddr))
-	log.Printf("Start Websocket server addr:%s", s.WsAddr)
+	log.Printf("Start Websocket server addr:%s（用于对接Fay https://github.com/TheRamU/Fay/tree/fay-sales-edition）", s.WsAddr)
 	httpServer := &http.Server{
 		Addr: s.WsAddr,
 		Handler: &WsHandler{upgrader: websocket.Upgrader{
